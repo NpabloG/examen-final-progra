@@ -1,0 +1,182 @@
+//examen final, Pablo Garay.
+
+//DEFINIMOS LIBRERIAS
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+// ESTRUCTURA DEL ARBOL
+typedef struct nodo {
+    int nro;
+    struct nodo* izq, * der;
+}*ABB;
+
+int numNodos = 0; // NUMERO DE NODOS DEL ARBOL ABB
+
+
+
+//ESTRUCTURA DE LA COLA
+struct nodoCola {
+    ABB ptr;
+    struct nodoCola* sgte;
+};
+struct cola {
+    struct nodoCola* delante;
+    struct nodoCola* atras;
+};
+
+
+
+
+ABB crearNodo(int x)
+{
+    ABB nuevoNodo = new(struct nodo);
+    nuevoNodo->nro = x;
+    nuevoNodo->izq = NULL;
+    nuevoNodo->der = NULL;
+
+    return nuevoNodo;
+}
+
+//FUNCION PARA INSERTAR O CREAR NODO
+void insertar(ABB& arbol, int x)
+{
+    if (arbol == NULL)
+    {
+        arbol = crearNodo(x);
+
+    
+        cout << "\n\t  listo" << endl << endl;
+    }
+    else if (x < arbol->nro)
+        insertar(arbol->izq, x);
+    else if (x > arbol->nro)
+        insertar(arbol->der, x);
+}
+
+
+//FUNCION BUSCAR NODO
+bool busquedaRec(ABB arbol, int dato)
+{
+    int r = 0;   // EL 0 NOS INDICA QUE LO ENCONTRE
+
+    if (arbol == NULL)
+        return r;
+
+    if (dato < arbol->nro)
+        r = busquedaRec(arbol->izq, dato);
+
+    else if (dato > arbol->nro)
+        r = busquedaRec(arbol->der, dato);
+
+    else
+        r = 1;   // DE LO CONTRARIO SON IGUALES, LO ENCONTRE
+
+    return r;
+}
+
+
+
+//ELIMINAR NODO
+void elimina(ABB& arbol, int x)
+{
+    if (arbol == NULL) return;
+
+    if (x < arbol->nro)
+        elimina(arbol->izq, x);
+    else if (x > arbol->nro)
+        elimina(arbol->der, x);
+
+   
+}
+
+//FUNCION DEL MENU PRINCIPAL
+void menu()
+{
+    system("cls"); //LIMPIAMOS PANTALLA
+    //MENSAJES A MOSTRAR COMO OPCIONES
+    cout << "\n\t  PABLO GARAY \n\n";
+    cout << "\n\t\t   ARBOL ABB "<<endl <<endl <<endl;
+    cout << "\t [1]  Insertar elemento                  \n";
+    cout << "\t [2]  Buscar arbol                      \n";
+    cout << "\t [3]  Eliminar elemento                  \n";
+    cout << "\t [4]  FINALIZAR                          \n";
+
+    cout << "\n\t Ingrese opcion : ";
+}
+
+
+
+//FUNCION PRINCIPAL
+int main()
+{
+    
+    ABB arbol = NULL;
+    //DECLARACION DE VARIABLE X
+    int x;
+
+    //DECLARACION DE LA VARIABLE DONDE ALMACENAREMOS LA OPCION ELEGIDA POR EL USUIARIO
+    int op;
+
+
+    // INICIAMOS UNA ESTRUCTURA DO WHILE, PARA CREAR UN BUCLE
+    do
+    {
+        //LLAMAMOS LA FUNCION MENU Y ALMACENAMOS LA OPCION DEL USUARIO EN LA VARIABLE OP
+        menu();  cin >> op;
+        cout << endl;
+
+        //SEGUN LA OPCION DEL USUARIO SE REASALIZARA ALGUNO DE ESTOS CASE O ALGUNA DE ESTAS OPCIONES
+        switch (op)
+        {
+        case 1:
+            //MENSAJE A PANTALLA
+            cout << " Ingrese valor : ";  cin >> x;
+            //LLAMAMOS LA FUNCION
+            insertar(arbol, x);
+            //INTERRUMPIMOS O DETENEMOS EL CASE
+            break;
+
+
+        case 2:
+
+            bool band;
+
+            //MENSAJE A PANTALLA
+            cout << " Valor a buscar: "; cin >> x;
+
+            //LLAMAMOS LA FUNCION
+            band = busquedaRec(arbol, x);
+
+            //estructura condicional
+            if (band == 1)
+                cout << "\n\tEncontrado";
+            else
+                cout << "\n\tNo encontrado";
+            //INTERRUMPIMOS O DETENEMOS EL CASE
+            break;
+
+
+        case 3:
+            //MENSAJE A PANTALLA
+            cout << " Valor a eliminar: "; cin >> x;
+            //LLAMAMOS LA FUNCION PARA ELIMINAR
+            elimina(arbol, x);
+            //MENSAJE A PANTALLA DE REALIZADO
+            cout << "\n\tEliminado";
+            break;
+
+
+        }
+
+        cout << endl << endl;
+        system("pause");// pausa
+        system("cls"); 
+
+     
+    } while (op != 4);
+    return 0;// ABANDONAMOS LA FUNCION MAIN
+}
+
+
